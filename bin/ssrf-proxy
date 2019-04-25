@@ -50,6 +50,7 @@ def usage
        --cookie=COOKIE    HTTP cookies (separated by ';')
        --user=USER[:PASS] HTTP basic authentication credentials.
        --user-agent=AGENT HTTP user-agent (Default: none)
+       --content-type=TYPE content-type request header (Default: none) 
        --rules=RULES      Rules for parsing client request
                           (separated by ',') (Default: none)
        --no-urlencode     Do not URL encode client request
@@ -126,6 +127,7 @@ def start_server
     ['--cookie',          GetoptLong::REQUIRED_ARGUMENT],
     ['--user',            GetoptLong::REQUIRED_ARGUMENT],
     ['--user-agent',      GetoptLong::REQUIRED_ARGUMENT],
+    ['--content-type',    GetoptLong::REQUIRED_ARGUMENT],
 
     ['--ssl',             GetoptLong::NO_ARGUMENT],
     ['--proxy',           GetoptLong::REQUIRED_ARGUMENT],
@@ -197,6 +199,7 @@ def start_server
   ssl = false
   upstream_proxy = nil
   user_agent = nil
+  c_type = nil
   insecure = false
 
   # logging
@@ -232,6 +235,8 @@ def start_server
         timeout = arg.to_i
       when '--user-agent'
         user_agent = arg
+      when '--content-type'
+        c_type = arg
       when '--insecure'
         insecure = true
       when '--placeholder'
@@ -330,6 +335,7 @@ def start_server
     user:             user,
     timeout:          timeout,
     user_agent:       user_agent,
+    c_type:           c_type,
     insecure:         insecure
   }
 

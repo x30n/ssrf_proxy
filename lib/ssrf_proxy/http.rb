@@ -142,6 +142,8 @@ module SSRFProxy
     #
     # @param user_agent [String] HTTP user-agent (Default: none)
     #
+    # @param c_type [String] HTTP Request content-type (Default: none)
+    #
     # @param insecure [Boolean] Skip server SSL certificate validation
     #
     #
@@ -213,6 +215,7 @@ module SSRFProxy
                    user: nil,
                    timeout: 10,
                    user_agent: nil,
+                   c_type: nil,
                    insecure: false)
 
       @SUPPORTED_METHODS = %w[GET HEAD DELETE POST PUT OPTIONS].freeze
@@ -232,6 +235,7 @@ module SSRFProxy
       @post_data = post_data.to_s || ''
       @rules = rules.to_s.split(/,/) || []
       @no_urlencode = no_urlencode || false
+      @c_type = c_type || nil
 
       # client request modification
       @ip_encoding = nil
@@ -636,6 +640,10 @@ module SSRFProxy
       end
 
       # set content type
+      puts "@c_type: #{@c_type}"
+      if @c_type
+        request_headers['content-type'] = @c_type
+      end
       if request_headers['content-type'].nil? && !request_body.eql?('')
         request_headers['content-type'] = 'application/x-www-form-urlencoded'
       end
